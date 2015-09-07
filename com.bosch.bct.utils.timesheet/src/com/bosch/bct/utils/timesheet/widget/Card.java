@@ -4,7 +4,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -15,6 +14,9 @@ import org.eclipse.swt.widgets.Text;
 public class Card extends Canvas implements PaintListener{
 
 	private Text textWidget;
+	private Font font;
+	
+	private int colorLineWidth = 5;
 
 	public Card(Composite parent, int style) {
 		super(parent, style);
@@ -25,38 +27,50 @@ public class Card extends Canvas implements PaintListener{
 	public void paintControl(PaintEvent paintEvent) {
 		
 		GC gc = paintEvent.gc;
+//		font = new Font(getDisplay(), new FontData("Ariel", 9, SWT.BOLD));
+//		gc.setFont(font);
+		int gcFontHeight = gc.getFontMetrics().getHeight();
+
+		int cardHeight = gcFontHeight + colorLineWidth*2 + 50;
+		
 		Composite parent = getParent();
 		Rectangle clientArea = parent.getClientArea();
 		
 		gc.setBackground(paintEvent.display.getSystemColor(SWT.COLOR_GRAY));
-		gc.fillRectangle(clientArea.x + 10, clientArea.y + 10, clientArea.width - 20, clientArea.height - 20);
+		gc.fillRectangle(0, 0, clientArea.width, cardHeight);
 		gc.setBackground(paintEvent.display.getSystemColor(SWT.COLOR_WHITE));
-		gc.fillRoundRectangle(clientArea.x + 15, clientArea.y + 15, clientArea.width - 30, clientArea.height - 30, 7, 7);
+		gc.fillRoundRectangle(colorLineWidth, colorLineWidth, clientArea.width - (colorLineWidth*2), cardHeight - (colorLineWidth*2), 7, 7);
 		
-		Font font = new Font(getDisplay(), new FontData("Ariel", 100, SWT.BOLD));
-		gc.setFont(font);
+//		paintEvent.display.getSystemFont();
 		
 		String taskType = "CODING"; 
 		Point taskTypeSize = gc.stringExtent(taskType); 
-		int gcFontHeight = gc.getFontMetrics().getHeight();
 		int taskTypeWidth  = taskTypeSize.x;
 
 		String taskName = "BIOSX-2874"; 
 
-		gc.drawLine(clientArea.x + 15, clientArea.y + gcFontHeight + 15, clientArea.width - 15, clientArea.y + gcFontHeight + 15);
+		//vertical line
+		gc.drawLine(5, gcFontHeight + 5, clientArea.width - (colorLineWidth*2), gcFontHeight + 5);
 		
-		gc.drawText(taskName, 20, 15); 
-		gc.drawText(taskType, clientArea.width - 20 - taskTypeWidth, 15); 
+		gc.drawText(taskName, 10, 5); 
+		gc.drawText(taskType, clientArea.width - (colorLineWidth*2) - taskTypeWidth, 5); 
 		
-		gc.drawLine(clientArea.width - 30 - taskTypeWidth, clientArea.y + 15, clientArea.width - 30 - taskTypeWidth, clientArea.y + gcFontHeight + 15);
+		gc.drawLine(clientArea.width - 20 - taskTypeWidth, 5, clientArea.width - 20 - taskTypeWidth, gcFontHeight + 5);
 		
 		if(textWidget == null){
 			textWidget = new Text(this, SWT.BORDER);
 		}
 		
 		String effortText = "EFFORT :";
-		gc.drawText(effortText, 20, clientArea.y + gcFontHeight + 25); 
+		gc.drawText(effortText, 20, gcFontHeight + 15); 
 		int effortTextLength = gc.stringExtent(effortText).x;
-		textWidget.setBounds(30 + effortTextLength, clientArea.y + gcFontHeight + 25, clientArea.width - 55 - effortTextLength, clientArea.height - 50 - gcFontHeight);
+		textWidget.setBounds(20 + effortTextLength, gcFontHeight + 15, clientArea.width - 45 - effortTextLength, cardHeight - 40 - gcFontHeight);
+	}
+	
+	
+	@Override
+	public void dispose() {
+		font.dispose();
+		super.dispose();
 	}
 }
