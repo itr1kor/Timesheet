@@ -11,14 +11,14 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-public class Card extends Canvas implements PaintListener{
+public class MappedCard extends Canvas implements PaintListener{
 
 	private Text textWidget;
 	private Font font;
 	
 	private int colorLineWidth = 5;
 
-	public Card(Composite parent, int style) {
+	public MappedCard(Composite parent, int style) {
 		super(parent, style);
 		addPaintListener(this);
 	}	
@@ -64,7 +64,7 @@ public class Card extends Canvas implements PaintListener{
 		String effortText = "EFFORT :";
 		gc.drawText(effortText, 20, gcFontHeight + 15); 
 		int effortTextLength = gc.stringExtent(effortText).x;
-		textWidget.setBounds(20 + effortTextLength, gcFontHeight + 15, clientArea.width - 45 - effortTextLength, cardHeight - 40 - gcFontHeight);
+		textWidget.setBounds(20 + effortTextLength + 5, gcFontHeight + 15, clientArea.width - 45 - effortTextLength, cardHeight - 40 - gcFontHeight);
 	}
 	
 	
