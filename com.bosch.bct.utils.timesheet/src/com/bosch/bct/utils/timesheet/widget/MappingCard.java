@@ -2,24 +2,24 @@ package com.bosch.bct.utils.timesheet.widget;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
-public class MappingCard extends Canvas implements PaintListener{
+import com.bosch.bct.utils.timesheet.model.Task;
+
+public class MappingCard extends Card{
 
 	private Font font;
 	
 	private int colorLineWidth = 5;
 
-	public MappingCard(Composite parent, int style) {
-		super(parent, style);
-		addPaintListener(this);
+	public MappingCard(Composite parent, int style, Task task, Color color) {
+		super(parent, style, task, color);
 	}	
 
 	@Override
@@ -35,17 +35,17 @@ public class MappingCard extends Canvas implements PaintListener{
 		Composite parent = getParent();
 		Rectangle clientArea = parent.getClientArea();
 		
-		gc.setBackground(paintEvent.display.getSystemColor(SWT.COLOR_GRAY));
+		gc.setBackground(color);
 		gc.fillRectangle(0, 0, clientArea.width, cardHeight);
 		gc.setBackground(paintEvent.display.getSystemColor(SWT.COLOR_WHITE));
 		gc.fillRoundRectangle(colorLineWidth, colorLineWidth, clientArea.width - (colorLineWidth*2), cardHeight - (colorLineWidth*2), 7, 7);
 		
 //		paintEvent.display.getSystemFont();
-		String taskType = "CODING"; 
+		String taskType = getTask().getTaskType().name();
 		Point taskTypeSize = gc.stringExtent(taskType); 
 		int taskTypeWidth  = taskTypeSize.x;
 
-		String taskName = "BIOSX-2874"; 
+		String taskName = getTask().getName();
 
 		//vertical line
 //		gc.drawLine(5, gcFontHeight + 5, clientArea.width - (colorLineWidth*2), gcFontHeight + 5);

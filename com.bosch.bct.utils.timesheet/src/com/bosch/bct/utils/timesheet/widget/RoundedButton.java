@@ -1,6 +1,8 @@
 package com.bosch.bct.utils.timesheet.widget;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
@@ -8,11 +10,14 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
-public class RoundedButton extends Canvas implements PaintListener{
+import com.bosch.bct.utils.timesheet.dialog.CreateTaskDialog;
+
+public class RoundedButton extends Canvas implements PaintListener, MouseListener{
 
 	public RoundedButton(Composite parent, int style) {
-		super(parent, SWT.BORDER);
+		super(parent, SWT.NONE);
 		addPaintListener(this);
+		addMouseListener(this);
 	}	
 
 	@Override
@@ -37,5 +42,21 @@ public class RoundedButton extends Canvas implements PaintListener{
 	@Override
 	public void dispose() {
 		super.dispose();
+	}
+
+	@Override
+	public void mouseDoubleClick(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseDown(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseUp(MouseEvent e) {
+		CreateTaskDialog createTaskDialog = new CreateTaskDialog(getShell());
+		createTaskDialog.open();
 	}
 }
