@@ -7,7 +7,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class Deck extends Composite{
+public class Deck extends Composite {
 
 	List<Card> cards = new ArrayList<>();
 

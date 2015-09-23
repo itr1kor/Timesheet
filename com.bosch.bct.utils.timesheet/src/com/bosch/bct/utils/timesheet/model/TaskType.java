@@ -4,5 +4,6 @@ public enum TaskType {
 	REQUIREMENT,
 	DESIGN,
 	CODING,
-	TESTING
+	TESTING,
+	REVIEW
 }

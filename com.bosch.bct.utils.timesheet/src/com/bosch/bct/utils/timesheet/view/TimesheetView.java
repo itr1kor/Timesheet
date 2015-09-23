@@ -3,11 +3,17 @@ package com.bosch.bct.utils.timesheet.view;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.part.ViewPart;
 
+import com.bosch.bct.utils.timesheet.listener.DialogCloseListener;
 import com.bosch.bct.utils.timesheet.model.Day;
 import com.bosch.bct.utils.timesheet.model.Task;
 import com.bosch.bct.utils.timesheet.model.TaskManager;
@@ -80,7 +86,7 @@ public class TimesheetView extends ViewPart {
 		
 		Deck deck = new Deck(scrolledComposite, SWT.BORDER);
 
-		DeckViewer deckViewer = new DeckViewer(deck);
+		final DeckViewer deckViewer = new DeckViewer(deck);
 		deckViewer.setContentProvider(new CardContentProvider(null));
 		deckViewer.setLabelProvider(new CardLabelProvider());
 		deckViewer.setInput(taskManager);
@@ -96,8 +102,8 @@ public class TimesheetView extends ViewPart {
 		bottomComposite.setLayout(new GridLayout(8, false));
 		bottomComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-//		new RoundedButton(rootComposite, SWT.BORDER).setLayoutData(new GridData(GridData.FILL_VERTICAL));
-		new RoundedButton(bottomComposite, SWT.NONE);
+		RoundedButton roundedButton = new RoundedButton(bottomComposite, SWT.NONE, taskManager, deckViewer);
+		
 		return rootComposite;
 	}
 	

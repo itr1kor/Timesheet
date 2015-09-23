@@ -1,5 +1,6 @@
 package com.bosch.bct.utils.timesheet.widget;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -11,13 +12,22 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
 import com.bosch.bct.utils.timesheet.dialog.CreateTaskDialog;
+import com.bosch.bct.utils.timesheet.listener.DialogCloseListener;
+import com.bosch.bct.utils.timesheet.model.TaskManager;
+import com.bosch.bct.utils.timesheet.viewer.DeckViewer;
 
 public class RoundedButton extends Canvas implements PaintListener, MouseListener{
 
-	public RoundedButton(Composite parent, int style) {
+	private TaskManager taskManager;
+	private CreateTaskDialog createTaskDialog;
+	private DeckViewer deckViewer;
+
+	public RoundedButton(Composite parent, int style, TaskManager taskManager, DeckViewer deckViewer) {
 		super(parent, SWT.NONE);
 		addPaintListener(this);
 		addMouseListener(this);
+		this.taskManager = taskManager;
+		this.deckViewer = deckViewer;
 	}	
 
 	@Override
@@ -56,7 +66,19 @@ public class RoundedButton extends Canvas implements PaintListener, MouseListene
 
 	@Override
 	public void mouseUp(MouseEvent e) {
-		CreateTaskDialog createTaskDialog = new CreateTaskDialog(getShell());
-		createTaskDialog.open();
+		createTaskDialog = new CreateTaskDialog(getShell(), taskManager);
+		if(createTaskDialog.open() == IDialogConstants.OK_ID){
+			deckViewer.refresh();
+		}
+	}
+	
+	public CreateTaskDialog getCreateTaskDialog() {
+		return createTaskDialog;
+	}
+	
+	public void addDialogCloseListener(DialogCloseListener listener) {
+		checkWidget ();
+		if (listener == null) SWT.error(SWT.ERROR_NULL_ARGUMENT);
+		addListener(SWT.Close, listener);
 	}
 }

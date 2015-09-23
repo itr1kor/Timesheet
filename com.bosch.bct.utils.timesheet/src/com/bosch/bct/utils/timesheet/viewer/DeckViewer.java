@@ -5,12 +5,12 @@ import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.util.SafeRunnable;
-import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
 
@@ -141,7 +141,7 @@ public class DeckViewer extends StructuredViewer{
 
 	@Override
 	protected void internalRefresh(Object element) {
-		internalRefresh(element, true);		
+		internalRefresh(element, false);	
 	}
 
 	@Override
@@ -160,13 +160,45 @@ public class DeckViewer extends StructuredViewer{
 		}
 	}
 
+	//TODO generalize the logic
 	protected void internalRefresh(Widget widget, Object element, boolean updateLabels) {
 
 		if (widget instanceof Card) {
 			if (updateLabels || !equals(element, widget.getData())) {
 				doUpdateItem(widget, element, true);
 			} else {
-				associate(element, (Card) widget);
+				associate(element, (Card) widget); 
+			}
+		}else if(widget instanceof Deck){
+			
+			Deck deck = (Deck) widget;
+			deck.setRedraw(false);
+			try{
+				Widget[] items = deck.getChildren();
+				Object[] children = getSortedChildren(getRoot());
+				if(children.length > items.length){
+
+					for (int i = items.length; i < children.length; i++) {
+						createTreeItem(deck, children[i]);
+					}
+				}else if(children.length < items.length){
+
+					for (int i = children.length - 1; i < items.length; i++) {
+						disassociate(items[i]);
+					}
+				}
+				List<Card> cards = getChildren(deck);
+				for (int i = 0; i < children.length; i++) {
+
+					Widget item = cards.get(i);
+					Object data = item.getData();
+					if (data != null) {
+						internalRefresh(item, data, updateLabels);
+					}
+				}
+			} finally {
+				deck.layout();
+				deck.setRedraw(true);
 			}
 		}
 	}
@@ -190,7 +222,7 @@ public class DeckViewer extends StructuredViewer{
 		//			associateListener.associate(element, item);
 	}
 
-	protected void disassociate(Card item) {
+	protected void disassociate(Widget item) {
 		//		if (associateListener != null)
 		//			associateListener.disassociate(item);
 		Object element = item.getData();
@@ -375,7 +407,7 @@ public class DeckViewer extends StructuredViewer{
 							children = getSortedChildren(parentElement);
 						}
 						for (int i = 0; i < children.length; i++) {
-							createTreeItem(widget, children[i], -1);
+							createTreeItem(widget, children[i]);
 						}
 					}
 				}
@@ -395,24 +427,29 @@ public class DeckViewer extends StructuredViewer{
 		return tasks;
 	}
 	
-	protected void createTreeItem(Widget parent, Object element, int index) {
+	protected void createTreeItem(Widget parent, Object element) {
 		Card card = newItem(parent, SWT.NULL, element);
 		updateItem(card, element);
 	}
 	
 	protected Card newItem(Widget parent, int flags, Object element) {
 		Card card = null;
-
-		if (busy) {
-			Task task = (Task) element;
-			CardLabelProvider labelProvider = (CardLabelProvider) getLabelProvider();
-			Color color = labelProvider.getColor(task);
-			if (ismapped) {
-				card = new MappedCard(deck, flags, task, color);
-			} else {
-				card = new MappingCard(deck, flags, task, color);
+		boolean oldBusy = isBusy();
+		setBusy(true);
+		try {
+			if (busy) {
+				Task task = (Task) element;
+				CardLabelProvider labelProvider = (CardLabelProvider) getLabelProvider();
+				Color color = labelProvider.getColor(task);
+				if (ismapped) {
+					card = new MappedCard((Composite) parent, flags, task, color);
+				} else {
+					card = new MappingCard((Composite) parent, flags, task, color);
+				}
+				card.setLayoutData(new GridData(GridData.FILL_BOTH));
 			}
-			card.setLayoutData(new GridData(GridData.FILL_BOTH));
+		} finally {
+			setBusy(oldBusy);
 		}
 		return card;
 	}
