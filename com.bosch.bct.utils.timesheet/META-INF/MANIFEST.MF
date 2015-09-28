@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Timesheet
-Bundle-SymbolicName: com.bosch.bct.utils.timesheet
+Bundle-SymbolicName: com.bosch.bct.utils.timesheet;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.bosch.bct.utils.timesheet.Activator
 Bundle-Vendor: BOSCH

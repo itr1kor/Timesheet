@@ -1,0 +1,14 @@
+package com.bosch.bct.utils.timesheet.model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class TaskManager {
+	private List<Task> tasks = new ArrayList<>();
+	public List<Task> tasks() {
+		return tasks;
+	}
+	public void addTask(Task task) {
+		tasks.add(task);
+	}
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="com.bosch.bct.utils.category"
+            class="com.bosch.bct.utils.timesheet.view.TimesheetView"
+            id="com.bosch.bct.utils.timesheet.view"
+            name="Timesheet"
+            restorable="true">
+      </view>
+      <category
+            id="com.bosch.bct.utils.category"
+            name="BCT Utility">
+      </category>
+   </extension>
+
+</plugin>
