@@ -3,17 +3,16 @@ package com.bosch.bct.utils.timesheet.view;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ShellAdapter;
-import org.eclipse.swt.events.ShellEvent;
-import org.eclipse.swt.events.ShellListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.ViewPart;
 
-import com.bosch.bct.utils.timesheet.listener.DialogCloseListener;
 import com.bosch.bct.utils.timesheet.model.Day;
 import com.bosch.bct.utils.timesheet.model.Task;
 import com.bosch.bct.utils.timesheet.model.TaskManager;
@@ -27,6 +26,7 @@ import com.bosch.bct.utils.timesheet.widget.RoundedButton;
 public class TimesheetView extends ViewPart {
 
 	TaskManager taskManager = new TaskManager();
+	private Font headerFont;
 	public TimesheetView() {
 	}
 
@@ -127,6 +127,18 @@ public class TimesheetView extends ViewPart {
 		scrolledComposite.setContent(cardSelectionComposite);
 		
 		Day[] days = {Day.MONDAY, Day.TUESDAY, Day.WEDNESDAY, Day.THURSDAY , Day.FRIDAY};
+		FontData fontData = new  FontData();
+		fontData.setHeight(12);
+		fontData.setStyle(SWT.BOLD);
+		headerFont = new Font(Display.getDefault(), fontData);
+		
+		for (int i = 0; i < days.length; i++) {
+			Label deckHeader = new Label(cardSelectionComposite, SWT.CENTER | SWT.BORDER);
+			deckHeader.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			deckHeader.setText(days[i].name());
+			deckHeader.setBackground(new Color(Display.getDefault(), 200, 200, 200));
+			deckHeader.setFont(headerFont);
+		}
 		
 		for (int i = 0; i < days.length; i++) {
 			createMappedCardDeck(cardSelectionComposite, days[i]);
@@ -148,6 +160,12 @@ public class TimesheetView extends ViewPart {
 	@Override
 	public void setFocus() {
 
+	}
+	
+	@Override
+	public void dispose() {
+		headerFont.dispose();
+		super.dispose();
 	}
 
 }

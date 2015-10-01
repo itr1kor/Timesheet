@@ -56,12 +56,10 @@ public class RoundedButton extends Canvas implements PaintListener, MouseListene
 
 	@Override
 	public void mouseDoubleClick(MouseEvent e) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void mouseDown(MouseEvent e) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
