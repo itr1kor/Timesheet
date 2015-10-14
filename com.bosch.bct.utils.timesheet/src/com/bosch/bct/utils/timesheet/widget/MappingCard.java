@@ -9,21 +9,29 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import com.bosch.bct.utils.timesheet.model.Task;
+import com.bosch.bct.utils.timesheet.viewer.DeckViewer;
 
-public class MappingCard extends Card{
+public class MappingCard extends Card {
 
 	private Font font;
 	
 	private int colorLineWidth = 5;
 
-	public MappingCard(Composite parent, int style, Task task, Color color) {
-		super(parent, style, task, color);
+	public MappingCard(Composite parent, int style, Task task, Color color, DeckViewer deckViewer) {
+		super(parent, style, task, color, deckViewer);
 	}	
 
 	@Override
 	public void paintControl(PaintEvent paintEvent) {
+		
+		if(selection){
+			color = Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY);
+		} else {
+			color = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+		}
 		
 		GC gc = paintEvent.gc;
 		font = new Font(getDisplay(), new FontData("Ariel", 9, SWT.BOLD));

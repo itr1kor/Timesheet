@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.bosch.bct.utils.timesheet.model.Task;
+import com.bosch.bct.utils.timesheet.viewer.DeckViewer;
 
 public class MappedCard extends Card{
 
@@ -19,8 +20,8 @@ public class MappedCard extends Card{
 	
 	private int colorLineWidth = 5;
 
-	public MappedCard(Composite parent, int style, Task task, Color color) {
-		super(parent, style, task, color);
+	public MappedCard(Composite parent, int style, Task task, Color color, DeckViewer deckViewer) {
+		super(parent, style, task, color, deckViewer);
 	}	
 
 	@Override

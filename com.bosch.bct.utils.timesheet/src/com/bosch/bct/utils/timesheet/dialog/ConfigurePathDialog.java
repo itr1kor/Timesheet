@@ -1,7 +1,9 @@
 package com.bosch.bct.utils.timesheet.dialog;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -16,11 +18,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.service.prefs.BackingStoreException;
-import org.osgi.service.prefs.Preferences;
+
+import com.bosch.bct.utils.timesheet.Activator;
 
 public class ConfigurePathDialog extends TitleAreaDialog {
 
 	private Text filePath;
+	final String SERVER_PATH = "ServerPath";
 
 	public ConfigurePathDialog(Shell parentShell) {
 		super(parentShell);
@@ -44,11 +48,11 @@ public class ConfigurePathDialog extends TitleAreaDialog {
 		filePath = new Text(composite, SWT.BORDER);
 		filePath.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		Preferences preferences = InstanceScope.INSTANCE.getNode("com.vogella.eclipse.preferences.test");
-		Preferences sub = preferences.node("Configure");
-		String serverPath = sub.get("ServerPath", filePath.getText());
-		filePath.setText(serverPath);
-
+		IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+		String serverPath = dialogSettings.get(SERVER_PATH);
+		if (serverPath != null) {
+			filePath.setText(serverPath);
+		}
 		Button browseButton = new Button(composite, SWT.NONE);
 		browseButton.setText("Browse..");
 		
@@ -78,14 +82,8 @@ public class ConfigurePathDialog extends TitleAreaDialog {
 	@Override
 	protected void buttonPressed(int buttonId) {
 		if(buttonId == IDialogConstants.OK_ID){
-			Preferences preferences = InstanceScope.INSTANCE.getNode("com.vogella.eclipse.preferences.test");
-			Preferences sub = preferences.node("Configure");
-			sub.put("ServerPath", filePath.getText());
-			try {
-				preferences.flush();
-			} catch (BackingStoreException e) {
-				e.printStackTrace();
-			}
+			IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+			dialogSettings.put("ServerPath", filePath.getText());
 		}
 		super.buttonPressed(buttonId);
 	}
