@@ -20,4 +20,8 @@ public class TaskManager {
 	public void addTask(Task task) {
 		tasks.add(task);
 	}
+
+	public void removeTasks(Task task) {
+		tasks.remove(task);		
+	}
 }

@@ -166,6 +166,7 @@ public class DeckViewer extends StructuredViewer{
 	}
 
 	//TODO generalize the logic
+	//TODO there is bug here. could you please solve it. refresh is not handled properly. 
 	protected void internalRefresh(Widget widget, Object element, boolean updateLabels) {
 
 		if (widget instanceof Card) {

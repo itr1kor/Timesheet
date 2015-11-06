@@ -24,7 +24,9 @@ import com.bosch.bct.utils.timesheet.model.TaskType;
 import com.bosch.bct.utils.timesheet.provider.CardContentProvider;
 import com.bosch.bct.utils.timesheet.provider.CardLabelProvider;
 import com.bosch.bct.utils.timesheet.viewer.DeckViewer;
+import com.bosch.bct.utils.timesheet.widget.AddRoundedButton;
 import com.bosch.bct.utils.timesheet.widget.Deck;
+import com.bosch.bct.utils.timesheet.widget.RemoveRoundedButton;
 import com.bosch.bct.utils.timesheet.widget.RoundedButton;
 
 public class TimesheetView extends ViewPart {
@@ -41,20 +43,37 @@ public class TimesheetView extends ViewPart {
 		if (taskManager.tasks().isEmpty()) {
 			createExample();
 		}
-		parent.setLayout(new GridLayout(2, false));
+		parent.setLayout(new GridLayout(1, false));
 		parent.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		SashForm form = new SashForm(parent, SWT.HORIZONTAL);
-		form.setLayout(new GridLayout(2, false));
-		form.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		
-		createMappingCardDeck(form);
-		createRightComposite(form);
-		
-		form.setWeights(new int[]{1,2});
+		firstLevelLayout(parent);
 	}
 	
+	private void firstLevelLayout(Composite parent) {
+
+		SashForm parentForm = new SashForm(parent, SWT.VERTICAL);
+		parentForm.setLayout(new GridLayout(1, false));
+		parentForm.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		SashForm formAbove = new SashForm(parentForm, SWT.HORIZONTAL);
+		formAbove.setLayout(new GridLayout(2, false));
+		formAbove.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		createMappingCardDeck(formAbove);
+		createRightComposite(formAbove);
+		
+//		SashForm formBelow = new SashForm(parentForm, SWT.HORIZONTAL);
+//		formBelow.setLayout(new GridLayout(1, false));
+//		formBelow.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		Composite composite = new Composite(parentForm, SWT.BORDER);
+		composite.setLayout(new GridLayout(2, false));
+		composite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, false, 2, 1));
+		
+		formAbove.setWeights(new int[]{ 1, 2 });
+		parentForm.setWeights(new int[]{ 7, 1});
+	}
+
 	private void createExample() {
 		Task req_123 = new Task("123", TaskType.REQUIREMENT);
 		req_123.addTaskMapping(Day.MONDAY, 5.0);
@@ -109,7 +128,8 @@ public class TimesheetView extends ViewPart {
 		bottomComposite.setLayout(new GridLayout(8, false));
 		bottomComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		RoundedButton roundedButton = new RoundedButton(bottomComposite, SWT.NONE, taskManager, deckViewer);
+		RoundedButton addRoundedButton = new AddRoundedButton(bottomComposite, SWT.NONE, taskManager, deckViewer);
+		RoundedButton removeRoundedButton = new RemoveRoundedButton(bottomComposite, SWT.NONE, taskManager, deckViewer);
 		
 		return rootComposite;
 	}
