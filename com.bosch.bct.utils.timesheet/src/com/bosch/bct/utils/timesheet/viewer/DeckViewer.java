@@ -1,9 +1,6 @@
 package com.bosch.bct.utils.timesheet.viewer;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.Assert;
@@ -17,7 +14,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
 
-import com.bosch.bct.utils.timesheet.model.Day;
 import com.bosch.bct.utils.timesheet.model.Task;
 import com.bosch.bct.utils.timesheet.model.TaskManager;
 import com.bosch.bct.utils.timesheet.provider.CardContentProvider;
@@ -37,6 +33,7 @@ public class DeckViewer extends StructuredViewer{
 		super();
 		this.deck = deck;
 		hookControl(deck);
+		setUseHashlookup(true);
 	}
 
 
@@ -183,14 +180,13 @@ public class DeckViewer extends StructuredViewer{
 				Widget[] items = deck.getChildren();
 				Object[] children = getSortedChildren(getRoot());
 				if (children.length > items.length) {
-
 					for (int i = items.length; i < children.length; i++) {
 						createTreeItem(deck, children[i]);
 					}
 				} else if(children.length < items.length) {
-
-					for (int i = children.length - 1; i < items.length; i++) {
+					for (int i = children.length; i < items.length; i++) {
 						disassociate(items[i]);
+						items[i].dispose();
 					}
 				}
 				List<Card> cards = getChildren(deck);
