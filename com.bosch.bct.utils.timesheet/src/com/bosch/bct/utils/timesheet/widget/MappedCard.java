@@ -38,7 +38,7 @@ public class MappedCard extends Card{
 		Rectangle clientArea = parent.getClientArea();
 		
 		gc.setBackground(color);
-		gc.fillRectangle(0, 0, clientArea.width, cardHeight);
+		gc.fillRoundRectangle(0, 0, clientArea.width, cardHeight, 15, 15);
 		gc.setBackground(paintEvent.display.getSystemColor(SWT.COLOR_WHITE));
 		gc.fillRoundRectangle(colorLineWidth, colorLineWidth, clientArea.width - (colorLineWidth*2), cardHeight - (colorLineWidth*2), 7, 7);
 		

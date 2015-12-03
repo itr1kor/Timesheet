@@ -1,6 +1,5 @@
 package com.bosch.bct.utils.timesheet.widget;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.Transfer;
@@ -28,7 +27,7 @@ public abstract class Card extends Canvas implements PaintListener, MouseListene
 	public boolean isdragged;
 
 	public Card(Composite parent, int style, Task initTask, Color initColor, DeckViewer deckViewer) {
-		super(parent, SWT.BORDER | style);
+		super(parent, /*SWT.BORDER |*/ style);
 		addPaintListener(this);
 		addMouseListener(this);
 		addDragDetectListener(this);
