@@ -9,7 +9,6 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
@@ -28,10 +27,12 @@ public class DeckViewer extends StructuredViewer{
 	private Deck deck;
 	private boolean busy;
 	private boolean ismapped;
+	
 	public DeckViewer(Deck deck) {
 		super();
 		this.deck = deck;
 		hookControl(deck);
+		setUseHashlookup(true);
 	}
 
 
@@ -161,6 +162,7 @@ public class DeckViewer extends StructuredViewer{
 	}
 
 	//TODO generalize the logic
+	//TODO there is bug here. could you please solve it. refresh is not handled properly. 
 	protected void internalRefresh(Widget widget, Object element, boolean updateLabels) {
 
 		if (widget instanceof Card) {
@@ -176,27 +178,28 @@ public class DeckViewer extends StructuredViewer{
 			try{
 				Widget[] items = deck.getChildren();
 				Object[] children = getSortedChildren(getRoot());
-				if(children.length > items.length){
-
+				if (children.length > items.length) {
 					for (int i = items.length; i < children.length; i++) {
 						createTreeItem(deck, children[i]);
 					}
-				}else if(children.length < items.length){
-
-					for (int i = children.length - 1; i < items.length; i++) {
+				} else if(children.length < items.length) {
+					for (int i = children.length; i < items.length; i++) {
 						disassociate(items[i]);
+						items[i].dispose();
 					}
 				}
 				List<Card> cards = getChildren(deck);
 				for (int i = 0; i < children.length; i++) {
-
-					Widget item = cards.get(i);
+					Card item = cards.get(i);
+					item.setData(children[i]);
 					Object data = item.getData();
+					item.setTask((Task) data);
 					if (data != null) {
 						internalRefresh(item, data, updateLabels);
 					}
 				}
 			} finally {
+				deck.setSize(deck.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 				deck.layout();
 				deck.setRedraw(true);
 			}
@@ -278,16 +281,11 @@ public class DeckViewer extends StructuredViewer{
 	}
 
 	protected void setSelection(List<Widget> items) {
-
-//		Card[] current = getSelection(deck);
-
-		// Don't bother resetting the same selection
-		//		if (isSameSelection(items, current)) {
-		//			return;
-		//		}
-		Card[] newItems = new Card[items.size()];
-		items.toArray(newItems);
-		deck.setSelection(newItems);
+		List<Card> selection = new ArrayList<>(items.size());
+		for (Widget widget : items) {
+			selection.add((Card) widget);
+		}
+		deck.setSelection(selection);
 	}
 
 	@Override
@@ -442,11 +440,11 @@ public class DeckViewer extends StructuredViewer{
 				CardLabelProvider labelProvider = (CardLabelProvider) getLabelProvider();
 				Color color = labelProvider.getColor(task);
 				if (ismapped) {
-					card = new MappedCard((Composite) parent, flags, task, color, deck.getDay());
+					card = new MappedCard((Composite) parent, flags, task, color, this, deck.getDay());
 				} else {
-					card = new MappingCard((Composite) parent, flags, task, color);
+					card = new MappingCard((Composite) parent, flags, task, color, this);
 				}
-				card.setLayoutData(new GridData(GridData.FILL_BOTH));
+//				card.setLayoutData(new GridData(GridData.FILL_BOTH));
 			}
 		} finally {
 			setBusy(oldBusy);

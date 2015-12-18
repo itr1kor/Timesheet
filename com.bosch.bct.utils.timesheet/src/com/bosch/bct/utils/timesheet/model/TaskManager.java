@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 public class TaskManager {
-	
-	private static TaskManager manager = new TaskManager();
+	private static TaskManager taskManager = new TaskManager(); 
+
 	private List<Task> tasks = new ArrayList<>();
 	private TaskToDayMapping taskToDayMapping = new TaskToDayMapping();
 	
@@ -51,10 +51,6 @@ public class TaskManager {
 		return null; 
 	}
 	
-	public static TaskManager getInstance() {
-		return manager;
-	}
-	
 	public Double getTaskEffort(Task task) {
 		Double totalEffort = 0.0;
 		if (taskToDayMapping.getMondayTasks().containsKey(task)) {
@@ -73,5 +69,13 @@ public class TaskManager {
 			totalEffort += taskToDayMapping.getFridayTasks().get(task);
 		}
 		return totalEffort;
+	}
+
+	public void removeTasks(Task task) {
+		tasks.remove(task);		
+	}
+
+	public static TaskManager getInstance() {
+		return taskManager;
 	}
 }

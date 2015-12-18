@@ -113,7 +113,6 @@ public class CreateTaskDialog extends TitleAreaDialog implements SelectionListen
 
 	@Override
 	public void widgetDefaultSelected(SelectionEvent e) {
-		// TODO Auto-generated method stub
 	}
 	
 	@Override
