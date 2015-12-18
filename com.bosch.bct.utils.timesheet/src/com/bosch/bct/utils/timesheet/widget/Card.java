@@ -1,5 +1,6 @@
 package com.bosch.bct.utils.timesheet.widget;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.Transfer;
@@ -36,7 +37,10 @@ public abstract class Card extends Canvas implements PaintListener, MouseListene
 		if(parent instanceof Deck){
 			((Deck)parent).addCard(this);
 		}
-		
+
+		//TODO uncomment below code in production phase
+		setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
+
 		final DragSource dragSource = new DragSource(this, DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK);
 		dragSource.setTransfer(new Transfer[] { CardTransfer.getInstance() });
 		dragSource.addDragListener(new CardDragSourceListner(deckViewer));
