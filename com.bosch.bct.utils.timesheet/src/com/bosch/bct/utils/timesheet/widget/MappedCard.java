@@ -3,7 +3,11 @@ package com.bosch.bct.utils.timesheet.widget;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
@@ -34,7 +38,6 @@ public class MappedCard extends Card {
 
 	@Override
 	public void paintControl(PaintEvent paintEvent) {
-
 
 		GC gc = paintEvent.gc;
 		//	font = new Font(getDisplay(), new FontData("Ariel", 9, SWT.BOLD));
@@ -81,6 +84,25 @@ public class MappedCard extends Card {
 		if(mapping.containsKey(task)) {
 			textWidget.setText(String.valueOf(mapping.get(task)));
 		}
+		
+		textWidget.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent event) {
+//				deckFooter.setText("Total Effort: " + taskManager.dayEffort(days[i]));
+			}
+		});
+		
+		textWidget.addVerifyListener(new VerifyListener() {
+
+			@Override
+			public void verifyText(VerifyEvent event) {
+				if (!('0' <= event.character && event.character <= '9')) {
+					event.doit = false;
+					return;
+				}
+			}
+		});
 
 	}
 	

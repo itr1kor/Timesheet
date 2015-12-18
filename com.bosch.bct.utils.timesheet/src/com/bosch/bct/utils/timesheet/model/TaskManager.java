@@ -1,8 +1,10 @@
 package com.bosch.bct.utils.timesheet.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class TaskManager {
 	private static TaskManager taskManager = new TaskManager(); 
@@ -49,6 +51,28 @@ public class TaskManager {
 			return taskToDayMapping.getFridayTasks();
 		}
 		return null; 
+	}
+	
+	
+	public Double dayEffort(Day day) {
+		Double totalEffort = 0.0;
+		Map<Task, Double> mappedTasks = null;
+		if(day.name().equalsIgnoreCase("Monday")) {
+			mappedTasks = taskToDayMapping.getMondayTasks();
+		} else if(day.name().equalsIgnoreCase("Tuesday")) {
+			mappedTasks =  taskToDayMapping.getTuesdayTasks();
+		} else if(day.name().equalsIgnoreCase("Wednesday")) {
+			mappedTasks =  taskToDayMapping.getWednesTasks();
+		} else if(day.name().equalsIgnoreCase("Thursday")) {
+			mappedTasks =  taskToDayMapping.getThursdayTasks();
+		} else if(day.name().equalsIgnoreCase("Friday")) {
+			mappedTasks =  taskToDayMapping.getFridayTasks();
+		}
+		Set<Task> keySet = mappedTasks.keySet();
+		for (Task task : keySet) {
+			totalEffort += mappedTasks.get(task);
+		}
+		return totalEffort;
 	}
 	
 	public Double getTaskEffort(Task task) {

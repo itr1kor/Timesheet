@@ -168,6 +168,12 @@ public class TimesheetView extends ViewPart {
 			scrolledComposite.setExpandHorizontal(true);
 			scrolledComposite.setContent(deck);
 			
+			Label deckFooter = new Label(rootComposite, SWT.CENTER | SWT.BORDER);
+			deckFooter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			deckFooter.setText("Total Effort: " + taskManager.dayEffort(days[i]));
+			deckFooter.setBackground(new Color(Display.getDefault(), 200, 200, 200));
+			deckFooter.setFont(headerFont);
+			
 			deck.setSize(scrolledComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		}
 	}
