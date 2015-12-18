@@ -2,6 +2,7 @@ package com.bosch.bct.utils.timesheet.provider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -28,18 +29,16 @@ public class CardContentProvider implements IStructuredContentProvider{
 
 	@Override
 	public Object[] getElements(Object inputElement) {
-
 		List<Task> daystask = new ArrayList<>();
 		if(inputElement instanceof TaskManager){
 			TaskManager taskManager = (TaskManager)inputElement;
 			List<Task> tasks = taskManager.tasks();
-			if(day == null){
+			if (day == null) {
 				return tasks.toArray();
-			}else{
-				for (Task task : tasks) {
-					if(task.getTaskMapping().containsKey(day)){
-						daystask.add(task);
-					}
+			} else {
+				Map<Task, Double> mapping = taskManager.getMapping(day);
+				if (mapping != null) {
+					return mapping.keySet().toArray();
 				}
 			}
 		}

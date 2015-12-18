@@ -3,17 +3,11 @@ package com.bosch.bct.utils.timesheet.view;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.ShellAdapter;
-import org.eclipse.swt.events.ShellEvent;
-import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.part.ViewPart;
 
-import com.bosch.bct.utils.timesheet.listener.DialogCloseListener;
 import com.bosch.bct.utils.timesheet.model.Day;
 import com.bosch.bct.utils.timesheet.model.Task;
 import com.bosch.bct.utils.timesheet.model.TaskManager;
@@ -26,7 +20,7 @@ import com.bosch.bct.utils.timesheet.widget.RoundedButton;
 
 public class TimesheetView extends ViewPart {
 
-	TaskManager taskManager = new TaskManager();
+	TaskManager taskManager = TaskManager.getInstance();
 	public TimesheetView() {
 	}
 
@@ -51,16 +45,16 @@ public class TimesheetView extends ViewPart {
 	
 	private void createExample() {
 		Task req_123 = new Task("123", TaskType.REQUIREMENT);
-		req_123.addTaskMapping(Day.MONDAY, 5.0);
+		taskManager.mapTask(Day.MONDAY, req_123, 5.0);
 		taskManager.addTask(req_123);
 		Task des_123 = new Task("123", TaskType.DESIGN);
-		des_123.addTaskMapping(Day.MONDAY, 5.0);
+		taskManager.mapTask(Day.MONDAY, des_123, 5.0);
 		taskManager.addTask(des_123);
 		taskManager.addTask(new Task("123", TaskType.CODING));
 		taskManager.addTask(new Task("123", TaskType.TESTING));
 		
 		Task req_456 = new Task("456", TaskType.REQUIREMENT);
-		req_456.addTaskMapping(Day.TUESDAY, 4.0);
+		taskManager.mapTask(Day.TUESDAY, req_456, 4.0);
 		taskManager.addTask(req_456);
 		taskManager.addTask(new Task("456", TaskType.DESIGN));
 		taskManager.addTask(new Task("456", TaskType.CODING));
@@ -84,7 +78,7 @@ public class TimesheetView extends ViewPart {
 		scrolledComposite.setLayout(new GridLayout(1, true));
 		scrolledComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		Deck deck = new Deck(scrolledComposite, SWT.BORDER);
+		Deck deck = new Deck(scrolledComposite, SWT.BORDER, null);
 
 		final DeckViewer deckViewer = new DeckViewer(deck);
 		deckViewer.setContentProvider(new CardContentProvider(null));
@@ -136,7 +130,7 @@ public class TimesheetView extends ViewPart {
 	
 
 	private Composite createMappedCardDeck(Composite parent, Day day){
-		Deck deck = new Deck(parent, SWT.BORDER);
+		Deck deck = new Deck(parent, SWT.BORDER, day);
 		DeckViewer deckViewer = new DeckViewer(deck, true);
 		deckViewer.setContentProvider(new CardContentProvider(day));
 		deckViewer.setLabelProvider(new CardLabelProvider());

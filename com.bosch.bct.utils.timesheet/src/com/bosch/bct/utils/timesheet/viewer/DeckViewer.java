@@ -442,7 +442,7 @@ public class DeckViewer extends StructuredViewer{
 				CardLabelProvider labelProvider = (CardLabelProvider) getLabelProvider();
 				Color color = labelProvider.getColor(task);
 				if (ismapped) {
-					card = new MappedCard((Composite) parent, flags, task, color);
+					card = new MappedCard((Composite) parent, flags, task, color, deck.getDay());
 				} else {
 					card = new MappingCard((Composite) parent, flags, task, color);
 				}

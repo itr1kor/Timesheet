@@ -19,6 +19,7 @@ public abstract class Card extends Canvas implements PaintListener{
 		addPaintListener(this);
 		task = initTask;
 		color = initColor;
+		
 		if(parent instanceof Deck){
 			((Deck)parent).addCard(this);
 		}

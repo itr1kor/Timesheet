@@ -1,5 +1,7 @@
 package com.bosch.bct.utils.timesheet.widget;
 
+import java.util.Map;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
@@ -10,17 +12,22 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.bosch.bct.utils.timesheet.model.Day;
 import com.bosch.bct.utils.timesheet.model.Task;
+import com.bosch.bct.utils.timesheet.model.TaskManager;
 
-public class MappedCard extends Card{
+public class MappedCard extends Card {
 
 	private Text textWidget;
 	private Font font;
+	private Day day;
+	private TaskManager taskManager = TaskManager.getInstance();
 	
 	private int colorLineWidth = 5;
 
-	public MappedCard(Composite parent, int style, Task task, Color color) {
+	public MappedCard(Composite parent, int style, Task task, Color color, Day initDay) {
 		super(parent, style, task, color);
+		day = initDay;
 	}	
 
 	@Override
@@ -65,6 +72,11 @@ public class MappedCard extends Card{
 		gc.drawText(effortText, 20, gcFontHeight + 15); 
 		int effortTextLength = gc.stringExtent(effortText).x;
 		textWidget.setBounds(20 + effortTextLength + 5, gcFontHeight + 15, clientArea.width - 45 - effortTextLength, cardHeight - 40 - gcFontHeight);
+		
+		Map<Task, Double> mapping = taskManager.getMapping(day);
+		if(mapping.containsKey(task)) {
+			textWidget.setText(String.valueOf(mapping.get(task)));
+		}
 	}
 	
 	

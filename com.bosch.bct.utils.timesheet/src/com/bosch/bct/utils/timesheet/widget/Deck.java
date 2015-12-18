@@ -7,15 +7,19 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.bosch.bct.utils.timesheet.model.Day;
+
 public class Deck extends Composite {
 
-	List<Card> cards = new ArrayList<>();
+	private List<Card> cards = new ArrayList<>();
+	private Day day;
 
-	public Deck(Composite parent, int style) {
+	public Deck(Composite parent, int style, Day initDay) {
 		super(parent, style);
 		setLayout(new GridLayout(1, true));
 		GridData layoutData = new GridData(GridData.FILL_BOTH);
 		setLayoutData(layoutData);
+		day = initDay;
 	}
 	
 	public List<Card> getCards() {
@@ -43,4 +47,9 @@ public class Deck extends Composite {
 
 	public void showItem(Card item) {
 	}
+	
+	public Day getDay() {
+		return day;
+	}
+
 }
