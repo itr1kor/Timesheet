@@ -6,7 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
-public class FirstWizardPage extends WizardPage {
+public class FourthWizardPage extends WizardPage {
 
 	@Override
 	public void createPageContents() {
@@ -14,7 +14,7 @@ public class FirstWizardPage extends WizardPage {
 		Text text = new Text("Task Name : ");
 		taskNumnerFields.getChildren().add(text);
 		
-		TextField textField = new TextField("first");
+		TextField textField = new TextField("fourth");
 		textField.setMinWidth(300);
 		taskNumnerFields.getChildren().add(textField);
 		

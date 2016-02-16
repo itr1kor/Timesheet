@@ -2,8 +2,8 @@ package com.bosch.utils.timesheet.widgets;
 
 import com.bosch.utils.timesheet.wizard.Wizard;
 import com.bosch.utils.timesheet.wizard.WizardDialog;
-import com.bosch.utils.timesheet.wizard.impl.FirstWizardPage;
-import com.bosch.utils.timesheet.wizard.impl.SecondWizardPage;
+import com.bosch.utils.timesheet.wizard.impl.CreateTaskWizard;
+import com.bosch.utils.timesheet.wizard.impl.CreateTaskWizardPage;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -15,28 +15,19 @@ public class FloatingPointButton extends Circle {
 	public FloatingPointButton(double radius) {
 		super(radius);
 		setFill(Color.TOMATO);
-//		Circle circle = new Circle();
-//		circle.setFill(Color.TOMATO);
-//		Text text = new Text("+");
-//		text.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 15));
-//		text.setBoundsType(TextBoundsType.VISUAL); 
-//		getChildren().addAll(circle, text);
-		
-		
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent event) {
 				WizardDialog dialog  = new WizardDialog();
-				Wizard wizard = new Wizard();
-				wizard.addPage(new FirstWizardPage());
-				wizard.addPage(new SecondWizardPage());
+				Wizard wizard = new CreateTaskWizard();
+				CreateTaskWizardPage wizardPage = new CreateTaskWizardPage();
+				wizard.addPage(wizardPage);
+				wizard.setTitle("Create New Task");
+				wizard.setMessage("Create new tasks by filling name/number and selecting specific task type.");
 				dialog.setWizard(wizard);
 				dialog.show();
 			}
 		});
 	}
-	
-	
-	
 }

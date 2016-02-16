@@ -1,22 +1,24 @@
 package com.bosch.utils.timesheet.model;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class TaskManager {
 	private static TaskManager taskManager = new TaskManager(); 
 
-	private List<Task> tasks = new ArrayList<>();
+//	private List<Task> tasks = new ArrayList<>();
+	ObservableList<Task> tasks = FXCollections.observableList(new ArrayList<Task>());
 	private TaskToDayMapping taskToDayMapping = new TaskToDayMapping();
 	
 	private TaskManager() {
 		
 	}
 	
-	public List<Task> tasks() {
+	public ObservableList<Task> tasks() {
 		return tasks;
 	}
 	

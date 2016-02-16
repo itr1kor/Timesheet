@@ -1,8 +1,8 @@
 package com.bosch.utils.timesheet.wizard;
 
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
-public abstract class WizardPage extends Pane {
+public abstract class WizardPage extends VBox {
 	
 	private Wizard wizard;
 
@@ -39,11 +39,11 @@ public abstract class WizardPage extends Pane {
         wizard = newWizard;
     }
 	
-	public void updateMessage(String message) {
-		wizard.setMessage(message);
-	}
-	
-	public void updateTitle(String title) {
-		wizard.setTitle(title);
-	}
+//	public void updateMessage(String message) {
+//		wizard.setMessage(message);
+//	}
+//	
+//	public void updateTitle(String title) {
+//		wizard.setTitle(title);
+//	}
 }

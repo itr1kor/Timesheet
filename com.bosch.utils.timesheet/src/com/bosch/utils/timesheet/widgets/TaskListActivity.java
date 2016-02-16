@@ -1,7 +1,12 @@
 package com.bosch.utils.timesheet.widgets;
 
+import java.util.List;
+
+import com.bosch.utils.timesheet.model.Task;
 import com.bosch.utils.timesheet.model.TaskManager;
 
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
@@ -44,6 +49,22 @@ public class TaskListActivity extends VBox{
 		
 		//TODO check for the visibility of scrollbar
 		 StackPane.setMargin(floatingPointButton, new Insets(0, 20.0, 5.0, 0));
+		 
+		 ObservableList<Task> tasks = TaskManager.getInstance().tasks();
+		 tasks.addListener(new ListChangeListener<Task>() {
+
+			@Override
+			public void onChanged(javafx.collections.ListChangeListener.Change<? extends Task> change) {
+				
+				while (change.next()) {
+					List<? extends Task> addedObjects = change.getAddedSubList();
+					for (Task task : addedObjects) {
+						MappingTaskCard taskCard = new MappingTaskCard(task);
+						recyclerView.addChild(taskCard);
+					}
+				}
+			}
+		});
 	}
 	
 	public DayMappingRecyclerView getRecyclerView() {

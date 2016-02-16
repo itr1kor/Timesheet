@@ -16,7 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-public class Wizard extends Scene {
+public abstract class Wizard extends Scene {
 
 	private VBox root;
 	private Text titleText;
@@ -50,7 +50,7 @@ public class Wizard extends Scene {
 		header.getChildren().add(titleText);
 		
 		messageText = new Text("This must be very long message");
-		messageText.setFont(Font.font("Times New Roman", FontWeight.LIGHT, 12));
+		messageText.setFont(Font.font("Times New Roman", FontWeight.LIGHT, 16));
 		header.getChildren().add(messageText);
 		root.getChildren().add(header);
 		
@@ -64,7 +64,7 @@ public class Wizard extends Scene {
 		navigationButtonList.setAlignment(Pos.CENTER_RIGHT);
 		navigationButtonList.setStyle("-fx-padding: 10px; -fx-background-color: #FFFFFF");
 		
-		backButton = new Button("Back");
+		backButton = new Button("< Back");
 		backButton.setMinWidth(75);
 		backButton.setDisable(true);
 		backButton.setVisible(content.getChildren().size() > 1);
@@ -83,7 +83,7 @@ public class Wizard extends Scene {
 			}
 		});
 		
-		nextButton = new Button("Next");
+		nextButton = new Button("Next >");
 		nextButton.setMinWidth(75);
 		nextButton.setVisible(content.getChildren().size() > 1);
 		navigationButtonList.getChildren().add(nextButton);
@@ -110,6 +110,7 @@ public class Wizard extends Scene {
 			@Override
 			public void handle(MouseEvent event) {
 				performFinish();
+				closeDialog();
 			}
 		});
 		
@@ -121,13 +122,14 @@ public class Wizard extends Scene {
 			@Override
 			public void handle(MouseEvent event) {
 				perfomCancel();
+				closeDialog();
 			}
 		});
 		
 		root.getChildren().add(navigationButtonList);
 	}
 	
-	public void createWizardContents() {
+	protected void createWizardContents() {
 		for (WizardPage wizardPage : pages) {
 			wizardPage.createPageContents();
 			wizardPage.setVisible(false);
@@ -139,6 +141,9 @@ public class Wizard extends Scene {
 	}
 	
 	
+	protected WizardPage getCurrentPage() {
+		return currentPage;
+	}
 	
 	protected void updateButton() {
 		backButton.setDisable(content.getChildren().indexOf(currentPage) == 0);
@@ -163,23 +168,15 @@ public class Wizard extends Scene {
 		messageText.setText(message);
 	}
 	
-	public void performFinish() {
-		if(wizardDialog != null) {
-    		wizardDialog.close();
-    	}
-    }
+	protected abstract void performFinish();
 
-    public void perfomCancel() {
-    	if(wizardDialog != null) {
-    		wizardDialog.close();
-    	}
-    }
+	protected abstract void perfomCancel();
 
-	public void setDialog(WizardDialog wizardDialog) {
+	protected void setDialog(WizardDialog wizardDialog) {
 		this.wizardDialog = wizardDialog; 
 	}
 
-	public WizardPage getNextPage(WizardPage wizardPage) {
+	protected WizardPage getNextPage(WizardPage wizardPage) {
 		int index = content.getChildren().indexOf(wizardPage);
 		if (content.getChildren().size() > index + 1) {
 			return (WizardPage) content.getChildren().get(index + 1);
@@ -187,11 +184,17 @@ public class Wizard extends Scene {
 		return null;
 	}
 
-	public WizardPage getPreviousPage(WizardPage wizardPage) {
+	protected WizardPage getPreviousPage(WizardPage wizardPage) {
 		int index = content.getChildren().indexOf(wizardPage);
 		if (-1 < index - 1) {
 			return (WizardPage) content.getChildren().get(index - 1);
 		}
 		return null;
+	}
+	
+	private void closeDialog() {
+		if(wizardDialog != null) {
+    		wizardDialog.close();
+    	}
 	}
 }

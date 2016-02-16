@@ -95,18 +95,17 @@ public class TimesheetView extends ViewPart {
 		taskManager.addTask(new Task("456", TaskType.CODING));
 		taskManager.addTask(new Task("456", TaskType.TESTING));
 		
-		
-		Task req_789 = new Task("789", TaskType.REVIEW);
-		taskManager.mapTask(Day.WEDNESDAY, req_789, 4.0);
-		taskManager.addTask(req_789);
-		taskManager.addTask(new Task("789", TaskType.DESIGN));
-		taskManager.addTask(new Task("789", TaskType.CODING));
-		taskManager.addTask(new Task("789", TaskType.REQUIREMENT));
-		
-		taskManager.addTask(new Task("1011", TaskType.REQUIREMENT));
-		taskManager.addTask(new Task("1011", TaskType.DESIGN));
-		taskManager.addTask(new Task("1011", TaskType.CODING));
-		taskManager.addTask(new Task("1011", TaskType.TESTING));
+//		Task req_789 = new Task("789", TaskType.REVIEW);
+//		taskManager.mapTask(Day.WEDNESDAY, req_789, 4.0);
+//		taskManager.addTask(req_789);
+//		taskManager.addTask(new Task("789", TaskType.DESIGN));
+//		taskManager.addTask(new Task("789", TaskType.CODING));
+//		taskManager.addTask(new Task("789", TaskType.REQUIREMENT));
+//		
+//		taskManager.addTask(new Task("1011", TaskType.REQUIREMENT));
+//		taskManager.addTask(new Task("1011", TaskType.DESIGN));
+//		taskManager.addTask(new Task("1011", TaskType.CODING));
+//		taskManager.addTask(new Task("1011", TaskType.TESTING));
 	}
 	
 	@Override
