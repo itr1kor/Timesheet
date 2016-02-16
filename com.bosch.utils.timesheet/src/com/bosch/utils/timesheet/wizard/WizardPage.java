@@ -1,43 +1,49 @@
 package com.bosch.utils.timesheet.wizard;
 
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 
-public class WizardPage extends Pane {
+public abstract class WizardPage extends Pane {
 	
+	private Wizard wizard;
+
 	public WizardPage() {
 		super();
-		createContent();
 		setStyle("-fx-padding: 10px; -fx-background-color: #FFFFFF");
 	}
 
-	private void createContent() {
-		HBox taskNumnerFields = new HBox(10);
-		Text text = new Text("Task Name : ");
-		taskNumnerFields.getChildren().add(text);
-		
-		TextField textField = new TextField();
-		textField.setMinWidth(300);
-		taskNumnerFields.getChildren().add(textField);
-		
-		getChildren().add(taskNumnerFields);
-	}
+	public abstract void createPageContents();
 
-	public void getNextPage() {
-
+	public WizardPage getNextPage() {
+		if (wizard == null) {
+			return null;
+		}
+		return wizard.getNextPage(this);
 	}
 	
-	public void getPreviousPage() {
-
+	public WizardPage getPreviousPage() {
+		if (wizard == null) {
+			return null;
+		}
+		return wizard.getPreviousPage(this);
 	}
 	
 	public boolean hasNextPage() {
-		return false;
+		return getNextPage() != null;
 	}
 	
 	public boolean canFinish() {
 		return false;
+	}
+	
+	public void setWizard(Wizard newWizard) {
+        wizard = newWizard;
+    }
+	
+	public void updateMessage(String message) {
+		wizard.setMessage(message);
+	}
+	
+	public void updateTitle(String title) {
+		wizard.setTitle(title);
 	}
 }

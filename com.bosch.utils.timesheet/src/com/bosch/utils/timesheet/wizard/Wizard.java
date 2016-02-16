@@ -1,5 +1,8 @@
 package com.bosch.utils.timesheet.wizard;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -24,6 +27,9 @@ public class Wizard extends Scene {
 	private Button backButton;
 	private Button nextButton;
 	private Button finishButton;
+	private WizardDialog wizardDialog;
+	
+	private List<WizardPage> pages = new ArrayList<WizardPage>();
 	
 	public Wizard() {
 		super(new VBox(1));
@@ -34,7 +40,6 @@ public class Wizard extends Scene {
 	}
 	
 	private void createContent() {
-		
 		VBox header = new VBox(5);
 		header.setFillWidth(true);
 		header.setMinHeight(50);
@@ -65,15 +70,13 @@ public class Wizard extends Scene {
 		backButton.setVisible(content.getChildren().size() > 1);
 		navigationButtonList.getChildren().add(backButton);
 		backButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
+			
 			@Override
 			public void handle(MouseEvent event) {
 				currentPage.setVisible(false);
 				int index = content.getChildren().indexOf(currentPage);
 				if (-1 < index - 1) {
 					currentPage = (WizardPage) content.getChildren().get(index - 1);
-//					content.getChildren().remove(currentPage);
-//					content.getChildren().add(currentPage);
 					currentPage.setVisible(true);
 					updateButton();
 				}
@@ -85,15 +88,13 @@ public class Wizard extends Scene {
 		nextButton.setVisible(content.getChildren().size() > 1);
 		navigationButtonList.getChildren().add(nextButton);
 		nextButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
+			
 			@Override
 			public void handle(MouseEvent event) {
 				currentPage.setVisible(false);
 				int index = content.getChildren().indexOf(currentPage);
 				if (content.getChildren().size() > index + 1) {
 					currentPage = (WizardPage) content.getChildren().get(index + 1);
-//					content.getChildren().remove(currentPage);
-//					content.getChildren().add(currentPage);
 					currentPage.setVisible(true);
 					updateButton();
 				}
@@ -105,7 +106,7 @@ public class Wizard extends Scene {
 		finishButton.setMinWidth(75);
 		navigationButtonList.getChildren().add(finishButton);
 		finishButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
+			
 			@Override
 			public void handle(MouseEvent event) {
 				performFinish();
@@ -116,7 +117,7 @@ public class Wizard extends Scene {
 		cancelButton.setMinWidth(75);
 		navigationButtonList.getChildren().add(cancelButton);
 		cancelButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
+			
 			@Override
 			public void handle(MouseEvent event) {
 				perfomCancel();
@@ -125,6 +126,18 @@ public class Wizard extends Scene {
 		
 		root.getChildren().add(navigationButtonList);
 	}
+	
+	public void createWizardContents() {
+		for (WizardPage wizardPage : pages) {
+			wizardPage.createPageContents();
+			wizardPage.setVisible(false);
+		}
+		if (currentPage == null) {
+			currentPage = (WizardPage) content.getChildren().get(0);
+			currentPage.setVisible(true);
+		}
+	}
+	
 	
 	
 	protected void updateButton() {
@@ -135,12 +148,11 @@ public class Wizard extends Scene {
 
 	public void addPage(WizardPage wizardPage) {
 		content.getChildren().add(content.getChildren().size(), wizardPage);
+		pages.add(wizardPage);
+		wizardPage.setWizard(this);
 		StackPane.setMargin(wizardPage, new Insets(5.0));
 		backButton.setVisible(content.getChildren().size() > 1);
 		nextButton.setVisible(content.getChildren().size() > 1);
-		if (currentPage == null) {
-			currentPage = (WizardPage) content.getChildren().get(0);
-		}
 	}
 	
 	public void setTitle(String title) {
@@ -152,8 +164,34 @@ public class Wizard extends Scene {
 	}
 	
 	public void performFinish() {
+		if(wizardDialog != null) {
+    		wizardDialog.close();
+    	}
     }
 
     public void perfomCancel() {
+    	if(wizardDialog != null) {
+    		wizardDialog.close();
+    	}
     }
+
+	public void setDialog(WizardDialog wizardDialog) {
+		this.wizardDialog = wizardDialog; 
+	}
+
+	public WizardPage getNextPage(WizardPage wizardPage) {
+		int index = content.getChildren().indexOf(wizardPage);
+		if (content.getChildren().size() > index + 1) {
+			return (WizardPage) content.getChildren().get(index + 1);
+		}
+		return null;
+	}
+
+	public WizardPage getPreviousPage(WizardPage wizardPage) {
+		int index = content.getChildren().indexOf(wizardPage);
+		if (-1 < index - 1) {
+			return (WizardPage) content.getChildren().get(index - 1);
+		}
+		return null;
+	}
 }

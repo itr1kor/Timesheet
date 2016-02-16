@@ -16,6 +16,13 @@ public class WizardDialog extends Stage {
 	
 	public void setWizard(Wizard wizard) {
 		setScene(wizard);
+		wizard.setDialog(this);
+		wizard.createWizardContents();
+		setWizardDialogSize();
 		sizeToScene();
+	}
+
+	private void setWizardDialogSize() {
+		
 	}
 }
